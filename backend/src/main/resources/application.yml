@@ -1,0 +1,39 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: tapcard
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 改成你自己本机的库名 / 账号 / 密码
+    url: jdbc:mysql://localhost:3306/tapcard?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: your_pwd
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      # 本项目不做逻辑删除：账单与流水是财务凭证，只能状态流转（决策 H3）
+
+# 自己改一个至少 32 字节的随机串，别用示例值
+tapcard:
+  jwt:
+    secret: change-this-to-your-own-32-bytes-secret-please
+    expire-minutes: 120
+  settle:
+    # 对账批次生成时间（小时），写报告时用得上
+    batch-hour: 2
+
+logging:
+  level:
+    com.zxy.tapcard: debug
